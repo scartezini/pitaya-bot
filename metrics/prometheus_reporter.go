@@ -2,7 +2,8 @@ package metrics
 
 import (
 	"fmt"
-	"log"
+    "github.com/prometheus/client_golang/prometheus/promhttp"
+    "log"
 	"net/http"
 	"sync"
 
@@ -99,7 +100,7 @@ func GetPrometheusReporter(game string, port int, constLabels map[string]string,
 		}
 
 		prometheusReporter.registerMetrics(constLabels)
-		http.Handle("/metrics", metricsReporterHandler(prometheus.Handler(), postMetricsScrapeAction))
+		http.Handle("/metrics", metricsReporterHandler(promhttp.Handler(), postMetricsScrapeAction))
 
 		go (func() {
 			log.Printf("Running prometheus on port %d for game %s", port, game)
